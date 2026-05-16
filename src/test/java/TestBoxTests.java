@@ -1,75 +1,56 @@
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pages.TextBoxPage;
+import testdata.TestBase;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
 import static testdata.TestData.*;
 
-public class TestBoxTests {
+public class TestBoxTests extends TestBase {
+    TextBoxPage textBoxPage = new TextBoxPage();
 
-
-
-    @BeforeAll
-    static void beforeAll(){
-        Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = "https://demoqa.com";
-        Configuration.pageLoadStrategy = "eager";
-        Configuration.holdBrowserOpen = true;
-        Configuration.timeout = 5000;
-    }
 
     @Test
     void fillFormTest() {
-        open("/text-box");
-        $("#userName").setValue(userName);
-        $("[id=userEmail]").setValue(userEmail);
-        $("[id=currentAddress]").setValue(currentAddress);
-        $("[id=permanentAddress]").setValue(permanentAddress);
-        $("[id=submit]").click();
-        $("#output #name").shouldHave(text("Sergey"));
-        $("[id=output]").$("[id=email]").shouldHave(text(userEmail));
-        $("[id=output]").$("[id=currentAddress]").shouldHave(text(currentAddress));
-        $("[id=output]").$("[id=permanentAddress]").shouldHave(text(permanentAddress));
 
+
+        textBoxPage.openPage();
+        textBoxPage.typeUserName(userName);
+        textBoxPage.typeUserEmail(userEmail);
+        textBoxPage.typeCurrentAddress(currentAddress);
+        textBoxPage.typePublicAddress(permanentAddress);
+        textBoxPage.submitForm();
+        textBoxPage.checkField("name", userName);
+        textBoxPage.checkField("email", userEmail);
+        textBoxPage.checkField("currentAddress", currentAddress);
+        textBoxPage.checkField("permanentAddress", permanentAddress);
     }
 
 
     // Негативные тесты
     @Test
     void invalidEmailTest() {
-        open("/text-box");
-        $("#userEmail").setValue("not-an-email");
-        $("#submit").click();
-
-        // Проверяем, что поле email подсветилось красным (появился CSS-класс ошибки)
-        $("#userEmail").shouldHave(cssClass("field-error"));
-        // Проверяем, что блок с результатом не отобразился
-        $("#output").shouldNot(be(visible));
+        textBoxPage.openPage();
+        textBoxPage.typeUserEmail(userEmailNegNotAnEmail); // "not-an-email"
+        textBoxPage.submitForm();
+        textBoxPage.userEmailInputShouldHaveErrorClass(); // Проверяем наличие CSS-класс ошибки у поля
+        textBoxPage.userEmailInputShouldNotBeVisible();
     }
 
     @Test
     void emptyFormSubmitTest() {
-        open("/text-box");
-        $("#submit").click();
-
-        // Проверяем, что блок с выводом данных отсутствует в DOM или не виден
-        $("#output").shouldNot(be(visible));
-        // Дополнительно: проверяем, что значения не заполнились (если id=name все же есть в DOM)
-        $("#output #name").shouldNot(exist);
+        textBoxPage.openPage();
+        textBoxPage.submitForm();
+        textBoxPage.userEmailInputShouldNotBeVisible();
+        textBoxPage.outputNameShouldNotExist();
     }
 
     @Test
     void incompleteEmailTest() {
-        open("/text-box");
-        $("#userName").setValue(userName);
-        $("#userEmail").setValue("sergey@missingdomain"); // Без .ru/.com и т.д.
-        $("#submit").click();
-
-        // Проверяем наличие класса ошибки у поля
-        $("#userEmail").shouldHave(cssClass("field-error"));
-        // Проверяем, что имя "Sergey" не появилось в итоговом блоке, так как форма не отправилась
-        $("#output").shouldNot(be(visible));
+        textBoxPage.openPage();
+        textBoxPage.typeUserName(userName);
+        textBoxPage.typeUserEmail(userEmailNeg); // sergey@missingdomain Без .ru/.com и т.д.
+        textBoxPage.submitForm();
+        textBoxPage.userEmailInputShouldHaveErrorClass(); // Проверяем наличие CSS-класс ошибки у поля
+        textBoxPage.userEmailInputShouldNotBeVisible(); // Проверяем, что блок с результатом не отобразился
     }
 
 }

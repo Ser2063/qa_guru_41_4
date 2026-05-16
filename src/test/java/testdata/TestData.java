@@ -3,7 +3,10 @@ package testdata;
 public class TestData {
 
     public static String userName = "Sergey";
-    public static String userEmail = "Sergey@sergey.ru";
+    public static String userEmail = "Sergey@sergey.ru"; // Правильная почта
+    public static String userEmailNeg = "sergey@missingdomain"; // Неправльная почта для негативного теста
+    public static String userEmailNegNotAnEmail = "not-an-email"; // Неправльная почта для негативного теста
+
     public static String currentAddress = "Adress 1";
     public static String permanentAddress= "Adress 2";
 
