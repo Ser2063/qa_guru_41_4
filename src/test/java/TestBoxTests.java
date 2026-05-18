@@ -12,7 +12,8 @@ public class TestBoxTests extends TestBase {
     void fillFormTest() {
 
 
-        textBoxPage.openPage()
+        textBoxPage
+                .openPage()
                 .typeUserName(userName)
                 .typeUserEmail(userEmail)
                 .typeCurrentAddress(currentAddress)
@@ -37,7 +38,8 @@ public class TestBoxTests extends TestBase {
 
     @Test
     void emptyFormSubmitTest() {
-        textBoxPage.openPage()
+        textBoxPage
+                .openPage()
                 .submitForm()
                 .userEmailInputShouldNotBeVisible()
                 .outputNameShouldNotExist();
@@ -45,7 +47,8 @@ public class TestBoxTests extends TestBase {
 
     @Test
     void incompleteEmailTest() {
-        textBoxPage.openPage()
+        textBoxPage
+                .openPage()
                 .typeUserName(userName)
                 .typeUserEmail(userEmailNeg) // sergey@missingdomain Без .ru/.com и т.д.
                 .submitForm()
