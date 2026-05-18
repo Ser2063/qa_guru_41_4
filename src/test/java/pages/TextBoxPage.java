@@ -24,40 +24,49 @@ public class TextBoxPage extends TestBase {
 
 
     // Actions
-    public void typeUserName(String value){
+    public TextBoxPage typeUserName(String value){
         userNameInput.setValue(value);
+        return this;
     }
-    public void typeUserEmail(String value){
+    public TextBoxPage typeUserEmail(String value){
         userEmailInput.setValue(value);
+        return this;
     }
 
-    public void typeCurrentAddress (String value){
+    public TextBoxPage typeCurrentAddress (String value){
         currentAddressInput.setValue(value);
+        return this;
     }
 
-    public void typePublicAddress (String value){
+    public TextBoxPage typePublicAddress (String value){
         permanentAddressInput.setValue(value);
+        return this;
     }
-    public void openPage(){
+    public TextBoxPage openPage(){
     open("/text-box");
+        return this;
     }
 
-    public void submitForm(){
+    public TextBoxPage submitForm(){
         submitButton.click();
+        return this;
     }
 
-    public void checkField (String key, String value) {
+    public TextBoxPage checkField (String key, String value) {
         outputResults.$(byId(key)).shouldHave(text(value));
+        return this;
     }
 
     // МЕТОД: проверка, что поле email имеет класс ошибки
-    public void userEmailInputShouldHaveErrorClass() {
+    public TextBoxPage userEmailInputShouldHaveErrorClass() {
         userEmailInput.shouldHave(cssClass("field-error"));
+        return this;
     }
     // Проверяем, что имя "Sergey" не появилось в итоговом блоке, так как форма не отправилась
 
-    public void userEmailInputShouldNotBeVisible() {
+    public TextBoxPage userEmailInputShouldNotBeVisible() {
         outputResults.shouldNot(be(visible));
+        return this;
     }
 
     // Вариант проверки негативного теста  для конкретного поля name

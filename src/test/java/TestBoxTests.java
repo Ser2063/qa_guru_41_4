@@ -12,45 +12,45 @@ public class TestBoxTests extends TestBase {
     void fillFormTest() {
 
 
-        textBoxPage.openPage();
-        textBoxPage.typeUserName(userName);
-        textBoxPage.typeUserEmail(userEmail);
-        textBoxPage.typeCurrentAddress(currentAddress);
-        textBoxPage.typePublicAddress(permanentAddress);
-        textBoxPage.submitForm();
-        textBoxPage.checkField("name", userName);
-        textBoxPage.checkField("email", userEmail);
-        textBoxPage.checkField("currentAddress", currentAddress);
-        textBoxPage.checkField("permanentAddress", permanentAddress);
+        textBoxPage.openPage()
+                .typeUserName(userName)
+                .typeUserEmail(userEmail)
+                .typeCurrentAddress(currentAddress)
+                .typePublicAddress(permanentAddress)
+                .submitForm()
+                .checkField("name", userName)
+                .checkField("email", userEmail)
+                .checkField("currentAddress", currentAddress)
+                .checkField("permanentAddress", permanentAddress);
     }
 
 
     // Негативные тесты
     @Test
     void invalidEmailTest() {
-        textBoxPage.openPage();
-        textBoxPage.typeUserEmail(userEmailNegNotAnEmail); // "not-an-email"
-        textBoxPage.submitForm();
-        textBoxPage.userEmailInputShouldHaveErrorClass(); // Проверяем наличие CSS-класс ошибки у поля
-        textBoxPage.userEmailInputShouldNotBeVisible();
+        textBoxPage.openPage()
+                .typeUserEmail(userEmailNegNotAnEmail) // "not-an-email"
+                .submitForm()
+                .userEmailInputShouldHaveErrorClass() // Проверяем наличие CSS-класс ошибки у поля
+                .userEmailInputShouldNotBeVisible();
     }
 
     @Test
     void emptyFormSubmitTest() {
-        textBoxPage.openPage();
-        textBoxPage.submitForm();
-        textBoxPage.userEmailInputShouldNotBeVisible();
-        textBoxPage.outputNameShouldNotExist();
+        textBoxPage.openPage()
+                .submitForm()
+                .userEmailInputShouldNotBeVisible()
+                .outputNameShouldNotExist();
     }
 
     @Test
     void incompleteEmailTest() {
-        textBoxPage.openPage();
-        textBoxPage.typeUserName(userName);
-        textBoxPage.typeUserEmail(userEmailNeg); // sergey@missingdomain Без .ru/.com и т.д.
-        textBoxPage.submitForm();
-        textBoxPage.userEmailInputShouldHaveErrorClass(); // Проверяем наличие CSS-класс ошибки у поля
-        textBoxPage.userEmailInputShouldNotBeVisible(); // Проверяем, что блок с результатом не отобразился
+        textBoxPage.openPage()
+                .typeUserName(userName)
+                .typeUserEmail(userEmailNeg) // sergey@missingdomain Без .ru/.com и т.д.
+                .submitForm()
+                .userEmailInputShouldHaveErrorClass() // Проверяем наличие CSS-класс ошибки у поля
+                .userEmailInputShouldNotBeVisible(); // Проверяем, что блок с результатом не отобразился
     }
 
 }
