@@ -1,79 +1,104 @@
 import org.junit.jupiter.api.Test;
+import pages.DemocaUiTestsPage;
 import testdata.TestBase;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
 import static testdata.TestData.*;
 
 public class DemocaUiTests extends TestBase {
 
+    DemocaUiTestsPage democaUiTestsPage = new DemocaUiTestsPage();
 
     @Test
     void fillingFormFieldsCSS() {
-        open("/automation-practice-form");
-        $("#firstName").setValue(firstName);
-        $("#lastName").setValue(lastName);
-        $("#userEmail").setValue(userEmail);
-        $$("#genterWrapper label").filterBy(text(genterWrapper)).first().click();
-        $("#userNumber").setValue(userNumber);
+
+        democaUiTestsPage.openPage();
+        democaUiTestsPage.typeFirstName(firstName);
+        democaUiTestsPage.typeLastName(lastName);
+        democaUiTestsPage.typeUserEmail(userEmail);
+        democaUiTestsPage.typeUserNumber(userNumber);
+        democaUiTestsPage.setGender(genterWrapper);
 
         // Дата рождения
-        $("#dateOfBirthInput").click();
-        $("select.react-datepicker__month-select").selectOption(monthSelect);
-        $("select.react-datepicker__year-select").selectOption(yearSelect);
-        $("div.react-datepicker__day--" + paddedDay).click();
+        democaUiTestsPage.setDateOfBirth(daySelect, monthSelect, yearSelect);
 
         // Предметы
-        $("#subjectsInput").setValue(subjectsInput).pressEnter();
+        democaUiTestsPage.typeSubjects(subjectsInput);
 
         //Хобби
-        $$("#hobbiesWrapper label").filterBy(text(hobbiesWrapperReading)).first().click();
-        $$("#hobbiesWrapper label").filterBy(text(hobbiesWrapperSports)).first().click();
+        democaUiTestsPage.setHobby(hobbiesWrapperReading);
+        democaUiTestsPage.setHobby(hobbiesWrapperSports);
 
         //Адрес
-        $("textarea#currentAddress").setValue(currentAddress);
+        democaUiTestsPage.typeCurrentAddress(currentAddress);
 
         //Картинка
-        $("#uploadPicture").uploadFromClasspath(uploadPicture); //добавлена папка test/resources вложен файл img.png
+        democaUiTestsPage.setPicture(uploadPicture);
 
         //штат и город
-        $("#state").scrollTo().shouldBe(interactable).click();
-        $$("div[class*='-option']").findBy(text(state)).click();
-        $("#city").scrollTo().shouldBe(interactable).click();
-        $$("div[class*='-option']").findBy(text(city)).click();
+        democaUiTestsPage.setState(state);
+        democaUiTestsPage.setCity(city);
 
         //нажимаем кнопку
-        $("button#submit").click();
+        democaUiTestsPage.submitForm();
 
-        //реконсиляция
-
-        $(".modal-content").shouldBe(visible);
-
-        //  Проверка по таблице
-        $(".table-responsive")
-                .$(byText("Student Name")).parent().shouldHave(text(firstName+ " " +lastName));
-        $(".table-responsive")
-                .$(byText("Student Email")).parent().shouldHave(text(userEmail));
-        $(".table-responsive")
-                .$(byText("Gender")).parent().shouldHave(text(genterWrapper));
-        $(".table-responsive")
-                .$(byText("Mobile")).parent().shouldHave(text(userNumber));
-        $(".table-responsive")
-                .$(byText("Date of Birth")).parent().shouldHave(text(daySelect+ " " + monthSelect + "," + yearSelect));
-        $(".table-responsive")
-                .$(byText("Subjects")).parent().shouldHave(text(subjectsInput));
-        $(".table-responsive")
-                .$(byText("Hobbies")).parent().shouldHave(text(hobbiesWrapperReading + ", " + hobbiesWrapperSports));
-        $(".table-responsive")
-                .$(byText("Picture")).parent().shouldHave(text(uploadPicture));
-        $(".table-responsive")
-                .$(byText("Address")).parent().shouldHave(text(currentAddress));
-        $(".table-responsive")
-                .$(byText("State and City")).parent().shouldHave(text(state+ " " + city));
+        // Реконсиляция (Проверка по таблице)
+        democaUiTestsPage.checkModalVisible()
+                .checkResult("Student Name", firstName + " " + lastName)
+                .checkResult("Student Email", userEmail)
+                .checkResult("Gender", genterWrapper)
+                .checkResult("Mobile", userNumber)
+                .checkResult("Date of Birth", daySelect + " " + monthSelect + "," + yearSelect)
+                .checkResult("Subjects", subjectsInput)
+                .checkResult("Hobbies", hobbiesWrapperReading + ", " + hobbiesWrapperSports)
+                .checkResult("Picture", uploadPicture)
+                .checkResult("Address", currentAddress)
+                .checkResult("State and City", state + " " + city);
 
         // Закрытие модального окна
-        $("#closeLargeModal").click();
+        democaUiTestsPage.closeModal();
 
+    }
+
+    @Test
+    void submitEmptyFormTest() {
+        democaUiTestsPage.openPage();
+        democaUiTestsPage.submitForm();
+        democaUiTestsPage.checkModalNotVisible(); // Проверка отсутствия модалки через существующий элемент UI
+        democaUiTestsPage.firstNameShouldBeRed(); // Проверка валидации (красная рамка)
+    }
+
+
+    @Test
+    void shortMobileNumberTest() {
+        democaUiTestsPage.openPage();
+        democaUiTestsPage.typeFirstName(firstName);
+        democaUiTestsPage.typeLastName(lastName);
+        democaUiTestsPage.setGender(genterWrapper);
+        democaUiTestsPage.typeUserNumber(userNumberNeg);
+        democaUiTestsPage.submitForm();
+        democaUiTestsPage.checkModalNotVisible();
+        democaUiTestsPage.checkUserNumberIsInvalid();
+    }
+
+
+    @Test
+    void alphabeticMobileNumberTest() {
+        democaUiTestsPage.openPage();
+        democaUiTestsPage.typeFirstName(firstName);
+        democaUiTestsPage.typeLastName(lastName);
+        democaUiTestsPage.setGender(genterWrapper);
+        democaUiTestsPage.typeUserNumber(userNumberNega);
+        democaUiTestsPage.submitForm();
+        democaUiTestsPage.checkModalNotVisible();
+    }
+
+    @Test
+    void missingGenderTest() {
+        democaUiTestsPage.openPage();
+        democaUiTestsPage.typeFirstName(firstName);
+        democaUiTestsPage.typeLastName(lastName);
+        democaUiTestsPage.typeUserNumber(userNumber); // Пропускаем клик по Gender
+        democaUiTestsPage.submitForm();
+        democaUiTestsPage.checkModalNotVisible();
     }
 }

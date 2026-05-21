@@ -10,8 +10,6 @@ public class TestBoxTests extends TestBase {
 
     @Test
     void fillFormTest() {
-
-
         textBoxPage
                 .openPage()
                 .typeUserName(userName)
