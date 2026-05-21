@@ -11,5 +11,7 @@ public class CalendarComponents {
         // Форматирование дня прямо здесь (например, "5" превратится в "005")
         String formattedDay = String.format("%03d", Integer.parseInt(day));
         $("div.react-datepicker__day--" + formattedDay).click();
+
     }
+
 }
