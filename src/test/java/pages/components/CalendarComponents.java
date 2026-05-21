@@ -4,10 +4,6 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class CalendarComponents {
 
-    //private final SelenideElement genderContainer =  $("#genterWrapper");
-
-
-
     public void setDate (String day, String month, String year){
 
         $("select.react-datepicker__month-select").selectOption(month);
