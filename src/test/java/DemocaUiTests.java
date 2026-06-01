@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 import pages.DemocaUiTestsPage;
-import testdata.TestBase;
 
 import static testdata.TestData.*;
 

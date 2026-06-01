@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 import pages.TextBoxPage;
-import testdata.TestBase;
 
 import static testdata.TestData.*;
 

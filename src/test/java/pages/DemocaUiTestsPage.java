@@ -2,18 +2,17 @@ package pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import pages.components.CalendarComponents;
-import testdata.TestBase;
+import pages.components.CalendarComponent;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class DemocaUiTestsPage extends TestBase {
+public class DemocaUiTestsPage {
 
 
     // Elements
-    CalendarComponents calendar = new CalendarComponents();
+    CalendarComponent calendar = new CalendarComponent();
 
     private final SelenideElement firstNameInput = $("#firstName");
     private final SelenideElement lastNameInput = $("#lastName");

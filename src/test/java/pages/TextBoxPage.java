@@ -1,14 +1,14 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
-import testdata.TestBase;
+
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
-public class TextBoxPage extends TestBase {
+public class TextBoxPage  {
 
     // Elements
 
