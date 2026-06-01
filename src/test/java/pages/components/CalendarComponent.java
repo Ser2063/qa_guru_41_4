@@ -19,7 +19,7 @@ public class CalendarComponent {
         // Форматирование дня прямо здесь (например, "5" превратится в "005")
         String formattedDay = String.format("%03d", Integer.parseInt(day));
 
-        // Клик по динамическому элементу дня
+
         // Базовая строка локатора для дня (так как она динамическая)
         String dayCssPrefix = "div.react-datepicker__day--";
         $(dayCssPrefix + formattedDay).click();
